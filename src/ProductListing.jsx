@@ -11,7 +11,6 @@ const ProductListing = ({ items }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const handleAddToCart = (product) => {
-    localStorage.setItem('selectedProduct', JSON.stringify(product));
     setSelectedProduct(product);
   };
 
@@ -236,16 +235,18 @@ const ProductListing = ({ items }) => {
                         ) : (
                           <p className="text-sm font-bold mb-2">NA</p>
                         )}
-                         <Link to="/product-details" className="mx-2">
-                         <button className="bg-teal-500 text-white p-2 rounded w-full"
+                        <button className="bg-teal-500 text-white p-2 rounded w-full"
                           onClick={() => handleAddToCart(product)}
                         >Add to Cart</button>
-                         </Link>
-                        
                       </div>
                     </div>
                   </div>
                 ))}
+            {selectedProduct && (
+              <Link path="/product-details">
+                <ProductDetails item={selectedProduct} />
+              </Link>
+            )}
           </div>
         </div>
       )}
