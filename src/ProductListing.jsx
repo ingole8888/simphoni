@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Components/Navbar'
+import ProductDetails from './ProductDetails';
+import { Link } from 'react-router-dom';
 
-const ProductListing = () => {
+const ProductListing = ({ items }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true)
   const [loading1, setLoading1] = useState(true)
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleAddToCart = (product) => {
+    localStorage.setItem('selectedProduct', JSON.stringify(product));
+    setSelectedProduct(product);
+  };
 
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searchResults1, setSearchResults1] = useState([]);
   const [trendingSearches, setTrendingSearches] = useState([]);
 
- 
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     setInputValue(value);
   };
 
   const handleSearchSelection = (selectedItem) => {
-  
+
   };
   const handleSearch = () => {
     localStorage.setItem('searchField', inputValue);
@@ -44,7 +52,7 @@ const ProductListing = () => {
 
     try {
       const response = await axios.request(searchOptions);
-      console.log("gdkjsfhksjdhfksj",response.data.response.product_collection)
+      console.log("gdkjsfhksjdhfksj", response.data.response.product_collection)
       setSearchResults1(response.data.response.product_collection);
       setLoading1(false)
     } catch (error) {
@@ -56,7 +64,7 @@ const ProductListing = () => {
     const storedSearchField = localStorage.getItem('searchField');
     if (storedSearchField) {
       fetchSearchData(storedSearchField);
-      
+
     }
     fetchData();
   }, []);
@@ -93,7 +101,7 @@ const ProductListing = () => {
     }
   };
 
-  console.log("gdkjsfhksjdhfksj1111",searchResults1)
+  console.log("gdkjsfhksjdhfksj1111", searchResults1)
   return (
     <>
       <Navbar />
@@ -157,7 +165,7 @@ const ProductListing = () => {
         </div>
       </div>
 
-      
+
       {loading1 ? (
         <p>Loading...</p>
       ) : (
@@ -183,7 +191,7 @@ const ProductListing = () => {
                         <h4 className="text-l font-bold mb-2">${product.item_price}/each</h4>
                         <p className="text-sm font-bold mb-2 text-teal-500">Saving : {product.average_overall_rating}%</p>
                         <p className="text-sm font-bold mb-2">Supplier : {product.manufacturer_name}</p>
-                        {product.delivery_guarantee_text  ? (
+                        {product.delivery_guarantee_text ? (
                           <p className="text-sm font-bold mb-2">{product.delivery_guarantee_text}</p>
                         ) : (
                           <p className="text-sm font-bold mb-2">NA</p>
@@ -228,7 +236,12 @@ const ProductListing = () => {
                         ) : (
                           <p className="text-sm font-bold mb-2">NA</p>
                         )}
-                        <button className="bg-teal-500 text-white p-2 rounded w-full">Add to Cart</button>
+                         <Link to="/product-details" className="mx-2">
+                         <button className="bg-teal-500 text-white p-2 rounded w-full"
+                          onClick={() => handleAddToCart(product)}
+                        >Add to Cart</button>
+                         </Link>
+                        
                       </div>
                     </div>
                   </div>

@@ -18,9 +18,16 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [trendingSearches, setTrendingSearches] = useState([]);
 
-const handleSearchSelection = (selectedItem) => {
+  const handleSearchSelection = (selectedItem) => {
+    const storedTrendingSearches = JSON.parse(localStorage.getItem('trendingSearches')) || [];
+    const updatedTrendingSearches = [...storedTrendingSearches, selectedItem];
+    localStorage.setItem('trendingSearches', JSON.stringify(updatedTrendingSearches));
+  };
 
-};
+useEffect(() => {
+  const storedTrendingSearches = JSON.parse(localStorage.getItem('trendingSearches')) || [];
+  setTrendingSearches(storedTrendingSearches);
+}, []);
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -116,15 +123,15 @@ const handleSearchSelection = (selectedItem) => {
           </ul>
           <div>
             <p className="font-bold mb-2">Trending Searches:</p>
-            {trendingSearches.map((trendingItem) => (
-              <span
-                key={trendingItem.id}
-                onClick={() => handleSearchSelection(trendingItem.name)}
-                className="cursor-pointer mr-2"
-              >
-                {trendingItem.name}
-              </span>
-            ))}
+            {trendingSearches.map((trendingItem, index) => (
+          <span
+            key={index} // Use a unique identifier for the key
+            onClick={() => handleSearchSelection(trendingItem)}
+            className="cursor-pointer mr-2"
+          >
+            {trendingItem}
+          </span>
+        ))}
           </div>
         </div>
       </div>
