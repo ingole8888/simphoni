@@ -34,7 +34,7 @@ useEffect(() => {
 
   const handleSearch =()=>{
     localStorage.setItem("searchField", inputValue)
-    navigate("/product-details")
+    navigate("/product-listing")
   }
 
   const fetchData = async () => {
